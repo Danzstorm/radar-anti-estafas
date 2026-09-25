@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { motion, AnimatePresence } from "motion/react";
+import { motion, AnimatePresence, useReducedMotion } from "motion/react";
 import { SCAM_TYPES, type Entry, type Verdict } from "../../shared/types";
 import { SCAM_LABEL, VERDICT_COLOR, VERDICT_LABEL } from "../lib/copy";
 
@@ -52,7 +52,7 @@ function Echo({ entry, now, latest }: { entry: Entry; now: number; latest: boole
       animate={{ scale: 1, opacity: 1 - age * 0.3 }}
       exit={{ scale: 0, opacity: 0 }}
       transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-      style={{ transformOrigin: `${x}px ${y}px` }}
+      style={{ transformBox: "fill-box", transformOrigin: "center" }}
     >
       <circle cx={x} cy={y} r={size * 1.9} fill={color} opacity={0.22} />
       <circle cx={x} cy={y} r={size} fill={color} stroke="var(--color-sheet)" strokeWidth=".8" />
@@ -79,6 +79,7 @@ export function Radar({ entries, busy }: { entries: Entry[]; busy: boolean }) {
     return () => clearInterval(t);
   }, []);
   const latestId = entries.at(-1)?.id;
+  const reduceMotion = useReducedMotion();
 
   return (
     <svg viewBox="-140 -118 280 236" className="h-full w-full" role="img" aria-label={`Radar con ${entries.length} mensajes analizados`}>
@@ -118,10 +119,12 @@ export function Radar({ entries, busy }: { entries: Entry[]; busy: boolean }) {
         </text>
       ))}
 
-      <motion.g animate={{ rotate: 360 }} transition={{ repeat: Infinity, ease: "linear", duration: busy ? 3.2 : 7 }} style={{ transformOrigin: "0px 0px" }}>
+      {/* SVG-native rotation pivots on the radar center (0,0); CSS transform-origin would pivot on the viewBox corner. */}
+      <g>
+        {!reduceMotion && <animateTransform attributeName="transform" type="rotate" from="0 0 0" to="360 0 0" dur={busy ? "3.2s" : "7s"} repeatCount="indefinite" />}
         <path d={`M0 0 L${R1} 0 A${R1} ${R1} 0 0 0 ${R1 * Math.cos(Math.PI / 6)} ${-R1 * Math.sin(Math.PI / 6)} Z`} fill="url(#sweep-fade)" transform="rotate(30)" />
         <line x1="0" y1="0" x2={R1} y2="0" stroke="var(--color-ink)" strokeOpacity=".5" strokeWidth=".7" />
-      </motion.g>
+      </g>
 
       <AnimatePresence>
         {entries.map((e) => (

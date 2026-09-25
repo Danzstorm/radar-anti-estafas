@@ -1,10 +1,11 @@
-import { motion } from "motion/react";
+import { useReducedMotion } from "motion/react";
 
 /**
  * Brand mark: the room at the center, the three verdict zones as rings, the sweep, and one
  * red echo caught at the edge. The same drawing as the favicon.
  */
 export function LogoMark({ className, spinning = false }: { className?: string; spinning?: boolean }) {
+  const reduceMotion = useReducedMotion();
   return (
     <svg viewBox="0 0 48 48" className={className} aria-hidden>
       <circle cx="24" cy="24" r="22" fill="var(--color-sheet)" />
@@ -12,14 +13,11 @@ export function LogoMark({ className, spinning = false }: { className?: string; 
       <circle cx="24" cy="24" r="14.5" fill="none" stroke="var(--color-r1)" strokeOpacity=".3" strokeWidth="8" />
       <circle cx="24" cy="24" r="8" fill="var(--color-r0)" fillOpacity=".22" />
       <circle cx="24" cy="24" r="22" fill="none" stroke="var(--color-ink)" strokeWidth="2.4" />
-      <motion.g
-        style={{ transformOrigin: "24px 24px" }}
-        animate={spinning ? { rotate: 360 } : undefined}
-        transition={spinning ? { repeat: Infinity, ease: "linear", duration: 6 } : undefined}
-      >
+      <g>
+        {spinning && !reduceMotion && <animateTransform attributeName="transform" type="rotate" from="0 24 24" to="360 24 24" dur="6s" repeatCount="indefinite" />}
         <path d="M24 24 L24 2.6 A21.4 21.4 0 0 1 42.5 13.3 Z" fill="var(--color-ink)" fillOpacity=".16" />
         <path d="M24 24 L42.5 13.3" stroke="var(--color-ink)" strokeWidth="2" strokeLinecap="round" />
-      </motion.g>
+      </g>
       <circle cx="36.4" cy="9.6" r="5.6" fill="var(--color-r3)" fillOpacity=".25" />
       <circle cx="36.4" cy="9.6" r="3.2" fill="var(--color-r3)" stroke="var(--color-sheet)" strokeWidth="1" />
       <circle cx="17.5" cy="29.5" r="2" fill="var(--color-r0)" />
