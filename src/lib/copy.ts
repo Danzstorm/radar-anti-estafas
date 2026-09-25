@@ -34,45 +34,41 @@ export const PRESSURE_LEVELS = ["Sin presión", "Presión leve", "Presión fuert
 export interface Mission {
   title: string;
   hint: string;
-  chips: string[];
-  examples: string[];
+  /** Tapping a chip fills in a complete, realistic message: fragments without context mislead the model and the room. */
+  chips: { label: string; text: string }[];
 }
 
 // Written the way these messages actually arrive in Peru: informal, with typos, emojis and local brands.
-const SCAMS = [
-  "Hola ma, soy yo, se me malogró el cel y estoy con este número nomás. Me puedes yapear 350 al toque? Es para algo urgente de la u, en la noche te explico 🙏",
-  "BCP: Estimado cliente, detectamos un consumo no reconocido de S/ 1,249.90 en su tarjeta. Si no lo reconoce valide su identidad aquí: https://bcp-seguridad-pe.com/validar",
-  "Olva Courier: Tu paquete N° 48213 no pudo ser entregado por dirección incompleta. Regulariza S/ 4.50 en https://olva-entregas.info en 24h o será devuelto.",
-  "Felicidades!! 🎉 Ud. fue seleccionado ganador de un iPhone 16 en el sorteo por aniversario de Plaza Vea. Para reclamar su premio pague el envío de S/ 19.90",
-  "Buenas, le saluda Karina de RR.HH. Tenemos una chamba remota, ganas S/ 150 diarios solo dando like a videos de YouTube. Te interesa? Te paso los detalles 😊",
-  "Causa, métete a mi grupo de trading, pones 500 y en una semana te devuelven 2 mil. Yo ya saqué mi plata, confía 💸",
-];
-
-const LOOKALIKES = [
-  "Ma, ya llegué a Arequipa, todo bien. Se me acabaron los datos, cuando puedas yapéame 20 soles para recargar, no es urgente 😘",
-  "Interbank: Tu código de verificación es 482913. No lo compartas con nadie, ni siquiera con personal del banco.",
-  "Oe, mañana vence el recibo de la luz. Lo pago yo con mi tarjeta y me yapeas tu parte cuando puedas.",
-  "SUNAT: Recuerda que tu declaración anual de renta vence el 12 de mayo. Preséntala en sunat.gob.pe con tu clave SOL.",
-];
-
 export const MISSIONS: Partial<Record<Round, Mission>> = {
   real: {
     title: "Pega un mensaje sospechoso que te haya llegado",
-    hint: "De WhatsApp, SMS o correo. Tapamos números, correos y tarjetas antes de analizarlo.",
-    chips: ["Hola ma, soy yo…", "Yapéame al toque…", "BCP: detectamos…", "Tu paquete no pudo…"],
-    examples: SCAMS,
+    hint: "De WhatsApp, SMS o correo, completo. Tapamos números, correos y tarjetas antes de analizarlo.",
+    chips: [
+      { label: "Hola ma, soy yo…", text: "Hola ma, soy yo, se me malogró el cel y estoy con este número nomás. Me puedes yapear 350 al toque? Es para algo urgente de la u, en la noche te explico 🙏" },
+      { label: "Cambié de número…", text: "Hola, soy yo, cambié de número, guárdalo. Oye, yapéame al toque 300 porfa, es urgente, luego te explico" },
+      { label: "BCP: detectamos…", text: "BCP: Estimado cliente, detectamos un consumo no reconocido de S/ 1,249.90 en su tarjeta. Si no lo reconoce valide su identidad aquí: https://bcp-seguridad-pe.com/validar" },
+      { label: "Tu paquete no pudo…", text: "Olva Courier: Tu paquete N° 48213 no pudo ser entregado por dirección incompleta. Regulariza S/ 4.50 en https://olva-entregas.info en 24h o será devuelto." },
+    ],
   },
   fool: {
     title: "Escribe la estafa más creíble que se te ocurra",
     hint: "Hazla sutil, sin prisas ni links raros. A ver si engañas a la IA.",
-    chips: ["Buenas, le saluda…", "Felicidades, ganaste…", "Hay una chamba…", "Invierte y gana…"],
-    examples: SCAMS,
+    chips: [
+      { label: "Del colegio…", text: "Buenas tardes, le escribe Carla de la APAFA del colegio. Estamos regularizando la cuota del paseo, ¿me confirma si ya la yapeó? Si no, le paso el número de la tesorera." },
+      { label: "Ganaste un premio…", text: "Felicidades!! 🎉 Ud. fue seleccionado ganador de un iPhone 16 en el sorteo por aniversario de Plaza Vea. Para reclamar su premio pague el envío de S/ 19.90" },
+      { label: "Hay una chamba…", text: "Buenas, le saluda Karina de RR.HH. Tenemos una chamba remota, ganas S/ 150 diarios solo dando like a videos de YouTube. ¿Te interesa? Te paso los detalles 😊" },
+      { label: "Invierte y gana…", text: "Causa, métete a mi grupo de trading, pones 500 y en una semana te devuelven 2 mil. Yo ya saqué mi plata, confía 💸" },
+    ],
   },
   falsePositive: {
     title: "Escribe un mensaje normal que parezca estafa",
     hint: "Algo real y legítimo que igual te haría dudar. ¿La IA se confunde?",
-    chips: ["Ma, ya llegué…", "Tu código es…", "Mañana vence…", "Te yapeo lo del…"],
-    examples: LOOKALIKES,
+    chips: [
+      { label: "Ma, ya llegué…", text: "Ma, ya llegué a Arequipa, todo bien. Se me acabaron los datos, cuando puedas yapéame 20 soles para recargar, no es urgente 😘" },
+      { label: "Tu código es…", text: "Interbank: Tu código de verificación es 482913. No lo compartas con nadie, ni siquiera con personal del banco." },
+      { label: "Mañana vence…", text: "Oe, mañana vence el recibo de la luz. Lo pago yo con mi tarjeta y me yapeas tu parte cuando puedas." },
+      { label: "Ya te yapeé…", text: "Ya te yapeé los 35 soles de la pizza de ayer, avísame si te llegó 🍕" },
+    ],
   },
 };
 

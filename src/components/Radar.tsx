@@ -26,7 +26,10 @@ function hash01(id: string, salt: number) {
 export function echoPosition(entry: Entry) {
   const sector = SCAM_TYPES.indexOf(entry.analysis.scamType);
   const angle = (sector + 0.15 + 0.7 * hash01(entry.id, 1)) * SECTOR - 90;
-  const radius = Math.min(R1 - 4, rOf(entry.analysis.isScam) + 5 * (hash01(entry.id, 2) - 0.5));
+  // Keep every echo inside its verdict's zone, including verdicts raised by our own rules.
+  const { isScam, verdict } = entry.analysis;
+  const p = verdict === "doubtful" ? Math.min(0.66, Math.max(0.34, isScam)) : verdict === "safe" ? Math.min(0.26, isScam) : Math.max(0.74, isScam);
+  const radius = Math.min(R1 - 4, rOf(p) + 5 * (hash01(entry.id, 2) - 0.5));
   const rad = (angle * Math.PI) / 180;
   return { x: radius * Math.cos(rad), y: radius * Math.sin(rad) };
 }

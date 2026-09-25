@@ -1,11 +1,12 @@
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
-import { Dices, Loader2, Monitor, Send, ShieldAlert, ShieldCheck, ShieldQuestion, EyeOff, Clock3 } from "lucide-react";
+import { Loader2, Monitor, Send, ShieldAlert, ShieldCheck, ShieldQuestion, EyeOff, Clock3 } from "lucide-react";
 import { REACTIONS, type Entry, type Guess, type Reaction } from "../../shared/types";
 import { useRoom } from "../lib/useRoom";
 import { MISSIONS, PRESSURE_LEVELS, SCAM_LABEL, VERDICT_COLOR, VERDICT_LABEL, ZONE_NAME, pct, riskColor } from "../lib/copy";
 
 const MAX = 400;
+const MIN = 20;
 const REACTION_LABEL: Record<Reaction, string> = { "😱": "Qué miedo", "😂": "Qué risa", "🤔": "Qué raro", "🚩": "Bandera roja", "👏": "Aplausos" };
 
 function clientId() {
@@ -102,27 +103,24 @@ export function Play() {
             />
             <div className="mt-1.5 flex items-center justify-between text-xs text-ink-faint">
               <span>Tapamos números, correos y tarjetas.</span>
-              <span className="num text-sm">{text.length}/{MAX}</span>
+              <span className="num text-sm">{text.trim().length < MIN ? `mín. ${MIN}` : `${text.length}/${MAX}`}</span>
             </div>
 
-            <div className="mt-3 flex flex-wrap gap-2">
+            <p className="mt-4 text-sm font-semibold text-ink-soft">¿No tienes uno a la mano? Toca un ejemplo y edítalo:</p>
+            <div className="mt-2 flex flex-wrap gap-2">
               {mission.chips.map((chip) => (
                 <button
-                  key={chip}
+                  key={chip.label}
                   type="button"
-                  onClick={() => onType(chip.replace("…", " "))}
-                  className="rounded-full border border-graticule bg-sheet px-3 py-1.5 text-sm text-ink-soft transition-colors hover:border-ink hover:text-ink"
+                  aria-pressed={text === chip.text}
+                  onClick={() => onType(chip.text)}
+                  className={`rounded-full border px-3 py-1.5 text-sm transition-colors ${
+                    text === chip.text ? "border-ink bg-ink text-paper" : "border-graticule bg-sheet text-ink-soft hover:border-ink hover:text-ink"
+                  }`}
                 >
-                  {chip}
+                  {chip.label}
                 </button>
               ))}
-              <button
-                type="button"
-                onClick={() => onType(mission.examples[Math.floor(Math.random() * mission.examples.length)])}
-                className="flex items-center gap-1.5 rounded-full bg-paper-deep px-3 py-1.5 text-sm font-semibold text-ink"
-              >
-                <Dices className="size-4" aria-hidden /> Dame un ejemplo
-              </button>
             </div>
 
             <fieldset className="mt-6">
@@ -157,7 +155,7 @@ export function Play() {
             <button
               type="button"
               onClick={submit}
-              disabled={sending || text.trim().length < 8}
+              disabled={sending || text.trim().length < MIN}
               className="mt-5 flex items-center justify-center gap-2 rounded-[14px] bg-ink px-5 py-4 text-lg font-semibold text-paper transition-opacity disabled:opacity-40"
             >
               {sending ? <Loader2 className="size-5 animate-spin" aria-hidden /> : <Send className="size-5" aria-hidden />}

@@ -8,7 +8,7 @@ interface SocketMeta { role: Role; typingUntil: number; lastReactionAt: number }
 interface Persisted { round: Round; frozen: boolean; entries: Entry[] }
 
 const MAX_ENTRIES = 600;
-const MIN_LENGTH = 8;
+const MIN_LENGTH = 20;
 const MAX_LENGTH = 400;
 const SEND_COOLDOWN_MS = 4000;
 const TYPING_WINDOW_MS = 4000;
@@ -54,7 +54,7 @@ export class Room extends DurableObject<Env> {
     const guess: Guess = body?.guess === "scam" || body?.guess === "safe" ? body.guess : "unsure";
 
     if (!OPEN_ROUNDS.includes(this.state.round)) return json({ error: "La ronda todavía no está abierta. ¡Mira la pantalla!" }, 409);
-    if (text.length < MIN_LENGTH) return json({ error: "Escribe un mensaje un poco más largo." }, 400);
+    if (text.length < MIN_LENGTH) return json({ error: "Escribe el mensaje completo (mínimo 20 caracteres)." }, 400);
     if (text.length > MAX_LENGTH) return json({ error: `Máximo ${MAX_LENGTH} caracteres.` }, 400);
     const last = this.lastSendByClient.get(clientId) ?? 0;
     if (Date.now() - last < SEND_COOLDOWN_MS) return json({ error: "Espera unos segundos antes de enviar otro." }, 429);
