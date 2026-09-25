@@ -52,7 +52,7 @@ export function Radar({ entries, busy }: { entries: Entry[]; busy: boolean }) {
   }, []);
 
   return (
-    <svg viewBox="-118 -118 236 236" className="h-full w-full" role="img" aria-label={`Radar con ${entries.length} mensajes analizados`}>
+    <svg viewBox="-140 -118 280 236" className="h-full w-full" role="img" aria-label={`Radar con ${entries.length} mensajes analizados`}>
       <defs>
         <radialGradient id="radar-sheet">
           <stop offset="0%" stopColor="var(--color-sheet)" />

@@ -70,7 +70,7 @@ export class Room extends DurableObject<Env> {
     }
 
     // Moderation never relies on the model alone: doubtful content waits for the presenter.
-    const status: EntryStatus = analysis.offensive >= 0.85 ? "hidden" : analysis.offensive >= 0.4 ? "pending" : "visible";
+    const status: EntryStatus = analysis.offensive >= 0.85 ? "hidden" : analysis.offensive >= 0.5 ? "pending" : "visible";
     const entry: Entry = { id: crypto.randomUUID(), text: masked, round: this.state.round, guess, analysis, status, at: Date.now() };
     this.state.entries = [...this.state.entries, entry].slice(-MAX_ENTRIES);
     await this.persist();

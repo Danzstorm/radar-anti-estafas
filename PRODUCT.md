@@ -35,7 +35,7 @@ Not a chatbot demo. The model never writes text: it answers narrow questions (is
 - One Jev call per message with all questions (speculative fan-out). Instructions in English, message state in Spanish.
 - Verdict tiers: scam (P ≥ 0.7), doubtful, safe (P ≤ 0.3). Risk index = 0.5·scam + 0.3·pressure/3 + 0.2·asks money/data.
 - Personal data (phones, emails, cards, IBAN, link paths) is masked before analysis and display; link hosts are kept.
-- Moderation: offensive ≥ 0.4 waits for presenter approval, ≥ 0.85 hidden; presenter can hide, show and freeze at any time. Moderation never relies on the model alone.
+- Moderation: offensive ≥ 0.5 waits for presenter approval, ≥ 0.85 hidden; presenter can hide, show and freeze at any time. Moderation never relies on the model alone.
 - Jev weaknesses to respect: numbers/dates (handle in code), literal reading, adversarial prompt injection (round 2 will surface this; treat as teaching moment).
 - Undecided: "words that give it away" heatmap, "fooled the AI" ranking, audience vote mode (not in scope now).
 

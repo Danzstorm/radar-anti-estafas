@@ -45,7 +45,7 @@ export function Screen() {
         {lobby ? (
           <Lobby online={room.presence.online} />
         ) : (
-          <div className="relative mx-auto mt-[1vw] aspect-square min-h-0 flex-1">
+          <div className="relative mx-auto mt-[1vw] aspect-[280/236] max-w-full min-h-0 flex-1">
             <Radar entries={entries} busy={room.presence.typing > 2 || entries.length > 20} />
             <AnimatePresence>{called && <CalledCard key={called.id} entry={called} />}</AnimatePresence>
           </div>
@@ -117,7 +117,7 @@ function CalledCard({ entry }: { entry: Entry }) {
       style={{ left: "50%", top: "50%" }}
       initial={{ opacity: 0, scale: 0.92, y: 24 }}
       animate={{ opacity: 1, scale: 1, y: 0 }}
-      exit={{ left: `${50 + (x / 236) * 100}%`, top: `${50 + (y / 236) * 100}%`, scale: 0.04, opacity: 0 }}
+      exit={{ left: `${50 + (x / 280) * 100}%`, top: `${50 + (y / 236) * 100}%`, scale: 0.04, opacity: 0 }}
       transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
       aria-live="polite"
     >
@@ -148,10 +148,10 @@ function Lobby({ online }: { online: number }) {
   return (
     <div className="flex min-h-0 flex-1 items-center gap-[3vw]">
       <div className="shrink-0 rounded-[16px] bg-sheet p-[1vw] shadow-[0_14px_40px_rgb(29_43_54/.18)]">
-        <QR url={joinUrl} className="size-[min(58vh,34vw)] [&_svg]:size-full" />
+        <QR url={joinUrl} className="size-[min(56vh,27vw)] [&_svg]:size-full" />
       </div>
       <div className="min-w-0">
-        <p className="num text-[5.6vw] font-bold uppercase leading-[0.9]">¿Te llegó un mensaje raro?</p>
+        <p className="num text-[4.6vw] font-bold uppercase leading-[0.9] text-balance">¿Te llegó un mensaje raro?</p>
         <p className="mt-[1.4vw] max-w-[28ch] text-[1.7vw] leading-snug text-ink-soft">
           Escanea, pégalo y la IA te dice en menos de un segundo qué tan probable es que sea estafa.
         </p>
