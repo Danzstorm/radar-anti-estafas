@@ -7,6 +7,7 @@ import { forecast } from "../lib/metrics";
 import { MISSIONS, PRESSURE_LEVELS, ROUND_LABEL, SCAM_LABEL, VERDICT_COLOR, VERDICT_LABEL, pct, riskColor, usd } from "../lib/copy";
 import { Radar, RadarLegend, echoPosition } from "../components/Radar";
 import { QR } from "../components/QR";
+import { Logo } from "../components/Logo";
 import { FloatingReactions, type Floating } from "../components/FloatingReactions";
 
 const CALL_MS = 7000;
@@ -38,8 +39,10 @@ export function Screen() {
   return (
     <main className="relative grid h-dvh grid-cols-[minmax(0,1.55fr)_minmax(0,1fr)] gap-[2.5vw] overflow-hidden p-[2.2vw]">
       <section className="flex min-h-0 flex-col">
-        <header className="flex items-baseline justify-between gap-6">
-          <h1 className="num text-[3.4vw] font-bold uppercase leading-none tracking-[-0.01em]">Radar Anti-Estafas</h1>
+        <header className="flex items-center justify-between gap-6">
+          <h1>
+            <Logo size="4.6vw" spinning />
+          </h1>
           <p className="num text-[1.7vw] font-medium uppercase text-ink-soft">{ROUND_LABEL[room.round]}</p>
         </header>
 

@@ -3,6 +3,7 @@ import { AnimatePresence, motion } from "motion/react";
 import { Loader2, Monitor, Send, ShieldAlert, ShieldCheck, ShieldQuestion, EyeOff, Clock3 } from "lucide-react";
 import { REACTIONS, type Entry, type Guess, type Reaction } from "../../shared/types";
 import { useRoom } from "../lib/useRoom";
+import { Logo } from "../components/Logo";
 import { MISSIONS, PRESSURE_LEVELS, SCAM_LABEL, VERDICT_COLOR, VERDICT_LABEL, ZONE_NAME, pct, riskColor } from "../lib/copy";
 
 const MAX = 400;
@@ -68,7 +69,7 @@ export function Play() {
   return (
     <main className="mx-auto flex min-h-dvh max-w-md flex-col px-4 pb-28 pt-5">
       <header className="flex items-center justify-between">
-        <p className="num text-2xl font-bold uppercase">Radar Anti-Estafas</p>
+        <Logo size="2.75rem" />
         <p className="flex items-center gap-1.5 text-sm text-ink-soft">
           <span className={`size-2 rounded-full ${room.connection === "open" ? "bg-r0" : "bg-r1"}`} aria-hidden />
           {room.connection === "open" ? "En vivo" : "Conectando…"}

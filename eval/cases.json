@@ -1,0 +1,414 @@
+{
+  "_doc": "Peruvian messages with the verdict a careful human would give. expect: scam | safe | flag (doubtful or scam, never safe) | notscam (safe or doubtful). type is checked only when present. knownLimit: reported but not counted as failure (ambiguous even for a careful human).",
+  "cases": [
+    {
+      "group": "family",
+      "expect": "scam",
+      "type": "family_impersonation",
+      "text": "Hola ma, soy yo, se me malogró el cel y estoy con este número nomás. Me puedes yapear 350 al toque? Es para algo urgente de la u, en la noche te explico 🙏"
+    },
+    {
+      "group": "family",
+      "expect": "scam",
+      "type": "family_impersonation",
+      "text": "Hola, soy yo, cambié de número, guárdalo. Oye, yapéame al toque 300 porfa, es urgente, luego te explico"
+    },
+    {
+      "group": "family",
+      "expect": "scam",
+      "type": "family_impersonation",
+      "text": "Tía buenas, soy Diego el hijo de su prima Rosa. Estoy en la comisaría por un choque y necesito 800 soles para salir, no le diga a mi mamá porfa 😢"
+    },
+    {
+      "group": "family",
+      "expect": "scam",
+      "type": "family_impersonation",
+      "text": "Pa, estoy escribiendo del cel de un amigo porque me robaron el mío. Necesito que me deposites 450 a esta cuenta del BCP para el hospital, es urgente"
+    },
+    {
+      "group": "family",
+      "expect": "scam",
+      "type": "family_impersonation",
+      "text": "Hola hermanito, soy tu prima Kathy, este es mi número nuevo. Me puedes hacer un favor? Plinéame 200 hasta el lunes que me pagan, no tengo ni para el pasaje"
+    },
+    {
+      "group": "family",
+      "expect": "scam",
+      "type": "family_impersonation",
+      "text": "Mamá no me llames que estoy sin saldo, solo puedo recibir mensajes. Tuve un problema y necesito 600 soles ahorita, te paso el número de Yape de mi amigo"
+    },
+    {
+      "group": "family",
+      "expect": "scam",
+      "type": "family_impersonation",
+      "text": "Abuelita soy yo tu nieto, estoy en un apuro con la policía, necesito que me ayudes con 1500 soles y que no le cuentes a nadie de la familia"
+    },
+    {
+      "group": "family",
+      "expect": "flag",
+      "text": "Hola, ¿me puedes yapear 100 soles? Es urgente, después te cuento"
+    },
+    {
+      "group": "bank",
+      "expect": "scam",
+      "type": "bank_phishing",
+      "text": "BCP: Estimado cliente, detectamos un consumo no reconocido de S/ 1,249.90 en su tarjeta. Si no lo reconoce valide su identidad aquí: https://bcp-seguridad-pe.com/validar"
+    },
+    {
+      "group": "bank",
+      "expect": "scam",
+      "type": "bank_phishing",
+      "text": "INTERBANK: Su clave de internet ha sido bloqueada por seguridad. Para reactivarla ingrese a https://interbank-activa.net en las próximas 2 horas"
+    },
+    {
+      "group": "bank",
+      "expect": "scam",
+      "type": "bank_phishing",
+      "text": "Yape: Tu cuenta será suspendida por actividad inusual. Actualiza tus datos aquí para evitar el bloqueo: https://yape-soporte.com/verificar"
+    },
+    {
+      "group": "bank",
+      "expect": "scam",
+      "type": "bank_phishing",
+      "text": "Hola le saluda Jorge del área de seguridad del BBVA. Le va a llegar un código por SMS, por favor dígamelo para anular la compra fraudulenta"
+    },
+    {
+      "group": "bank",
+      "expect": "scam",
+      "type": "bank_phishing",
+      "text": "Scotiabank le informa: su tarjeta fue desactivada. Llame al área de fraudes y tenga a la mano su número de tarjeta y clave para validarla"
+    },
+    {
+      "group": "bank",
+      "expect": "scam",
+      "text": "Banco de la Nación: Usted es beneficiario del Bono de 600 soles. Cobre ingresando su DNI y número de tarjeta en https://bono-bn-peru.com"
+    },
+    {
+      "group": "bank",
+      "expect": "scam",
+      "text": "Hola, me llegó un Yape tuyo de 150 soles por error 😅 ¿me lo puedes devolver a este número? Es que era para pagar la pensión de mi hijo"
+    },
+    {
+      "group": "bank",
+      "expect": "scam",
+      "type": "bank_phishing",
+      "text": "Plin informa: se ha registrado un nuevo dispositivo en su cuenta. Si no fue usted, confirme su código de validación respondiendo este mensaje"
+    },
+    {
+      "group": "parcel",
+      "expect": "scam",
+      "type": "parcel_delivery",
+      "text": "Olva Courier: Tu paquete N° 48213 no pudo ser entregado por dirección incompleta. Regulariza S/ 4.50 en https://olva-entregas.info en 24h o será devuelto."
+    },
+    {
+      "group": "parcel",
+      "expect": "scam",
+      "type": "parcel_delivery",
+      "text": "Serpost: Su envío internacional se encuentra retenido en aduanas. Pague la tasa de S/ 12.80 para liberarlo: https://serpost-pagos.com"
+    },
+    {
+      "group": "parcel",
+      "expect": "scam",
+      "type": "parcel_delivery",
+      "text": "DHL: su paquete está en espera. Confirme su dirección y pague el costo de reenvío de 2.99 USD en el siguiente enlace dhl-pe-entrega.com"
+    },
+    {
+      "group": "parcel",
+      "expect": "scam",
+      "type": "parcel_delivery",
+      "text": "Shalom: Hola! Tenemos una encomienda a su nombre pero falta pagar el flete de S/ 18. Yapee al 9XX XXX XXX y le entregamos hoy mismo"
+    },
+    {
+      "group": "parcel",
+      "expect": "scam",
+      "text": "SUNAT Aduanas: Su compra de AliExpress tiene impuestos pendientes. Pague S/ 36.40 hoy para evitar el decomiso en https://sunat-aduanas-pago.com"
+    },
+    {
+      "group": "prize",
+      "expect": "scam",
+      "type": "prize_lottery",
+      "text": "Felicidades!! 🎉 Ud. fue seleccionado ganador de un iPhone 16 en el sorteo por aniversario de Plaza Vea. Para reclamar su premio pague el envío de S/ 19.90"
+    },
+    {
+      "group": "prize",
+      "expect": "scam",
+      "type": "prize_lottery",
+      "text": "CLARO: Su línea ganó 5000 soles en el sorteo Claro Puntos. Para cobrar deposite S/ 50 por gastos notariales al número de cuenta indicado"
+    },
+    {
+      "group": "prize",
+      "expect": "scam",
+      "type": "prize_lottery",
+      "text": "Movistar te regala un Samsung Galaxy por tus 10 años con nosotros 🎁 Solo completa tus datos aquí: https://movistar-premios.xyz"
+    },
+    {
+      "group": "prize",
+      "expect": "scam",
+      "type": "prize_lottery",
+      "text": "Hola! Ganaste una canasta navideña en el sorteo de Saga Falabella 🎄 Escríbenos por WhatsApp con tu DNI y número de tarjeta para coordinar la entrega"
+    },
+    {
+      "group": "prize",
+      "expect": "scam",
+      "type": "prize_lottery",
+      "text": "La Tinka: su boleto resultó ganador de S/ 25,000. Para el desembolso comuníquese con el asesor y cancele el impuesto a la renta de S/ 300"
+    },
+    {
+      "group": "investment",
+      "expect": "scam",
+      "type": "investment",
+      "text": "Causa, métete a mi grupo de trading, pones 500 y en una semana te devuelven 2 mil. Yo ya saqué mi plata, confía 💸"
+    },
+    {
+      "group": "investment",
+      "expect": "scam",
+      "type": "investment",
+      "text": "Invierte desde 100 dólares en criptomonedas con nuestro robot de IA y gana 30% semanal garantizado. Cupos limitados, únete al Telegram hoy"
+    },
+    {
+      "group": "investment",
+      "expect": "scam",
+      "type": "investment",
+      "text": "Amiga te cuento de este negocio, entras con 200 soles y metes a 2 personas, y ellas a 2 más, y así en un mes ya recuperaste el triple ✨"
+    },
+    {
+      "group": "investment",
+      "expect": "scam",
+      "type": "investment",
+      "text": "Hola, soy asesora financiera de una empresa en Lima, estamos ofreciendo inversión en ganado con 15% mensual de rentabilidad asegurada, ¿le interesa?"
+    },
+    {
+      "group": "investment",
+      "expect": "scam",
+      "type": "investment",
+      "text": "Mira mi pana, con Forex yo saqué 3 mil en dos semanas. Te paso a mi mentor, solo tienes que depositar para abrir tu cuenta"
+    },
+    {
+      "group": "job",
+      "expect": "scam",
+      "type": "job_offer",
+      "text": "Buenas, le saluda Karina de RR.HH. Tenemos una chamba remota, ganas S/ 150 diarios solo dando like a videos de YouTube. ¿Te interesa? Te paso los detalles 😊"
+    },
+    {
+      "group": "job",
+      "expect": "scam",
+      "type": "job_offer",
+      "text": "Hola! Buscamos personas para dejar reseñas de 5 estrellas en Google Maps. Pago de 5 soles por reseña, al día puedes ganar hasta 300. Escríbeme por Telegram"
+    },
+    {
+      "group": "job",
+      "expect": "scam",
+      "type": "job_offer",
+      "text": "Felicitaciones, fue seleccionado para trabajar en Minera Antamina con sueldo de S/ 6,500. Para continuar debe pagar S/ 180 por el examen médico ocupacional"
+    },
+    {
+      "group": "job",
+      "expect": "scam",
+      "type": "job_offer",
+      "text": "Trabajo desde casa, sin experiencia, empaquetando lapiceros. Ganas 1200 semanales. Solo pagas el kit de inicio de 90 soles"
+    },
+    {
+      "group": "job",
+      "expect": "scam",
+      "type": "job_offer",
+      "text": "Hola, vi tu CV en Bumeran. Tenemos una vacante de call center, pero para separar tu cupo necesitas yapear 50 soles por el uniforme"
+    },
+    {
+      "group": "other-scam",
+      "expect": "scam",
+      "text": "SAT Lima: Registra una papeleta impaga con descuento del 83% solo hoy. Pague aquí antes que pase a cobranza coactiva: https://sat-pagos-lima.com"
+    },
+    {
+      "group": "other-scam",
+      "expect": "scam",
+      "text": "Netflix: No pudimos procesar tu último pago. Actualiza tu método de pago en las próximas 24 horas o tu cuenta será cancelada: netflix-pe-pagos.com"
+    },
+    {
+      "group": "other-scam",
+      "expect": "scam",
+      "text": "Entel: Su chip será bloqueado hoy por falta de registro biométrico. Envíe foto de su DNI por ambos lados a este número para evitar el corte"
+    },
+    {
+      "group": "other-scam",
+      "expect": "scam",
+      "text": "Hola, soy de soporte de WhatsApp. Te enviamos un código de 6 dígitos por SMS, reenvíamelo para verificar tu cuenta y que no la eliminen"
+    },
+    {
+      "group": "other-scam",
+      "expect": "flag",
+      "text": "Buenas, vendo mi iPhone 15 Pro nuevo en caja a 1500 soles, tengo boleta. Me separas con 300 por Yape y te lo mando por Olva mañana"
+    },
+    {
+      "group": "subtle-scam",
+      "expect": "flag",
+      "text": "Buenas tardes, le escribe Carla de la APAFA del colegio. Estamos regularizando la cuota del paseo, ¿me confirma si ya la yapeó? Si no, le paso el número de la tesorera.",
+      "knownLimit": true
+    },
+    {
+      "group": "subtle-scam",
+      "expect": "flag",
+      "text": "Hola vecino, soy la administradora del edificio, este es mi número nuevo. Por favor yapéeme el mantenimiento de este mes a este número y no al anterior"
+    },
+    {
+      "group": "legit",
+      "expect": "safe",
+      "text": "Ma, ya llegué a Arequipa, todo bien. Se me acabaron los datos, cuando puedas yapéame 20 soles para recargar, no es urgente 😘"
+    },
+    {
+      "group": "legit",
+      "expect": "safe",
+      "text": "Interbank: Tu código de verificación es 482913. No lo compartas con nadie, ni siquiera con personal del banco."
+    },
+    {
+      "group": "legit",
+      "expect": "safe",
+      "text": "Oe, mañana vence el recibo de la luz. Lo pago yo con mi tarjeta y me yapeas tu parte cuando puedas."
+    },
+    {
+      "group": "legit",
+      "expect": "safe",
+      "text": "Ya te yapeé los 35 soles de la pizza de ayer, avísame si te llegó 🍕"
+    },
+    {
+      "group": "legit",
+      "expect": "safe",
+      "text": "Oe causa, ¿vamos al partido del sábado? Yo compro las entradas y me yapeas después"
+    },
+    {
+      "group": "legit",
+      "expect": "safe",
+      "text": "BCP: Consumo de S/ 45.90 en TOTTUS SAN MIGUEL con tu tarjeta terminada en 1234. Si no reconoces esta operación llama al 311-9898."
+    },
+    {
+      "group": "legit",
+      "expect": "safe",
+      "text": "Yape: Recibiste S/ 50.00 de Juan P. Revisa tus movimientos en la app."
+    },
+    {
+      "group": "legit",
+      "expect": "safe",
+      "text": "Tu pedido de Rappi está en camino 🛵 Llegará en 15 minutos. Sigue a tu repartidor en la app."
+    },
+    {
+      "group": "legit",
+      "expect": "safe",
+      "text": "Olva Courier: Tu envío 7731 fue entregado hoy a las 10:42. Gracias por confiar en nosotros."
+    },
+    {
+      "group": "legit",
+      "expect": "safe",
+      "text": "SUNAT: Recuerda que tu declaración anual de renta vence el 12 de mayo. Preséntala en sunat.gob.pe con tu clave SOL."
+    },
+    {
+      "group": "legit",
+      "expect": "safe",
+      "text": "Señora Carmen, buenos días, le recuerdo que el alquiler del depa vence este viernes. Puede depositarme a la cuenta de siempre. Gracias!"
+    },
+    {
+      "group": "legit",
+      "expect": "safe",
+      "text": "Profe, le yapeo la cuota del paseo mañana en la mañana, disculpe la demora"
+    },
+    {
+      "group": "legit",
+      "expect": "safe",
+      "text": "Amor, ¿compras pan de camino? Yo ya pedí el pollo a la brasa 🍗"
+    },
+    {
+      "group": "legit",
+      "expect": "safe",
+      "text": "Equipo, la reunión de mañana se mueve a las 3pm. Traigan el avance del informe por favor."
+    },
+    {
+      "group": "legit",
+      "expect": "safe",
+      "text": "Hola Dani, te paso el número de cuenta para lo de la polla del mundial: BCP 191-xxxx. Son 20 soles por cabeza 😂"
+    },
+    {
+      "group": "legit",
+      "expect": "safe",
+      "text": "Movistar: Tu recibo de octubre por S/ 69.90 vence el 15/10. Paga en la app Mi Movistar o en agentes autorizados."
+    },
+    {
+      "group": "legit",
+      "expect": "safe",
+      "text": "Clínica San Pablo: Le recordamos su cita de pediatría mañana 9:00 am. Llegar 15 minutos antes con su DNI."
+    },
+    {
+      "group": "legit",
+      "expect": "safe",
+      "text": "Tu código de acceso a Mi Claro es 551203. Vence en 5 minutos."
+    },
+    {
+      "group": "legit",
+      "expect": "notscam",
+      "text": "Ma, ¿me yapeas para el pasaje? Salí tarde de la chamba y ya no tengo saldo 🙏"
+    },
+    {
+      "group": "legit",
+      "expect": "notscam",
+      "text": "Oye, préstame 50 soles hasta el viernes porfa, ya sabes que te pago"
+    },
+    {
+      "group": "legit",
+      "expect": "safe",
+      "text": "Hola, soy Rosa la vecina del 302. Te dejé tu paquete de Mercado Libre en la portería porque no estabas 📦"
+    },
+    {
+      "group": "legit",
+      "expect": "safe",
+      "text": "Felicidades por tu cumple sobrino!! Te yapeé un regalito, disfrútalo 🎂🎉"
+    },
+    {
+      "group": "legit",
+      "expect": "notscam",
+      "text": "Hola tía, soy Lucía, cambié de número 😊 guárdame este nuevo por fa"
+    },
+    {
+      "group": "legit",
+      "expect": "safe",
+      "text": "BBVA: Tu estado de cuenta de septiembre ya está disponible. Revísalo en la app BBVA Perú o en www.bbva.pe"
+    },
+    {
+      "group": "legit",
+      "expect": "safe",
+      "text": "Hola, ¿sigue disponible la bici que publicaste en Marketplace? ¿La puedo ver el sábado en la tarde?"
+    },
+    {
+      "group": "legit",
+      "expect": "notscam",
+      "text": "Te yapeo 50 de adelanto por la mesa y el resto cuando la recoja el domingo, ¿ok?"
+    },
+    {
+      "group": "legit",
+      "expect": "safe",
+      "text": "Recuerda que el lunes no hay clases por el feriado. Saludos, la tutora de 3ro B."
+    },
+    {
+      "group": "legit",
+      "expect": "safe",
+      "text": "Plin: Enviaste S/ 25.00 a María G. Operación 00482193."
+    },
+    {
+      "group": "subtle-scam",
+      "expect": "flag",
+      "text": "Dani, ahora yapéame a este número nuevo porfa, el otro lo perdí. Son los 200 del alquiler de la cochera"
+    },
+    {
+      "group": "bank",
+      "expect": "scam",
+      "text": "YAPE PROMOS 🎉 Ganaste S/ 500 por usar Yape este mes. Para abonarlo ingresa tu número y clave de 6 dígitos aquí: yape-promos.com"
+    },
+    {
+      "group": "other-scam",
+      "expect": "scam",
+      "text": "Hola, ¿el depa en Miraflores sigue en alquiler? Ah, ya está casi separado, pero si me yapeas 500 de garantía hoy te lo guardo, no puedo mostrarlo hasta el lunes"
+    },
+    {
+      "group": "family",
+      "expect": "scam",
+      "type": "family_impersonation",
+      "text": "Ma soy yo, te escribo desde el WhatsApp de mi amiga. Me asaltaron y me quitaron todo, yapéale a ella 250 para el taxi a la casa, rápido porfa"
+    }
+  ]
+}

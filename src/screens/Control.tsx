@@ -2,6 +2,7 @@ import { useState } from "react";
 import { ArrowRight, Eye, EyeOff, Pause, Play as PlayIcon, RotateCcw, Check } from "lucide-react";
 import { ROUNDS, type ControlAction, type Entry, type EntryStatus, type Round } from "../../shared/types";
 import { useRoom } from "../lib/useRoom";
+import { Logo, LogoMark } from "../components/Logo";
 import { forecast } from "../lib/metrics";
 import { ROUND_LABEL, ROUND_SCRIPT, SCAM_LABEL, VERDICT_LABEL, pct, riskColor, usd } from "../lib/copy";
 
@@ -23,7 +24,8 @@ export function Control() {
   if (!token || room.connection === "unauthorized") {
     return (
       <main className="mx-auto flex min-h-dvh max-w-sm flex-col justify-center px-4">
-        <h1 className="num text-4xl font-bold uppercase">Panel del presentador</h1>
+        <Logo size="3.2rem" />
+        <h1 className="num mt-4 text-4xl font-bold uppercase">Panel del presentador</h1>
         {room.connection === "unauthorized" && <p role="alert" className="mt-3 text-r3">Esa clave no es correcta.</p>}
         <form
           className="mt-6 flex flex-col gap-3"
@@ -61,7 +63,9 @@ export function Control() {
   return (
     <main className="mx-auto max-w-3xl px-4 py-5">
       <header className="flex flex-wrap items-center justify-between gap-3">
-        <h1 className="num text-3xl font-bold uppercase">Control</h1>
+        <h1 className="num flex items-center gap-2 text-3xl font-bold uppercase">
+          <LogoMark className="size-9" /> Control
+        </h1>
         <p className="text-sm text-ink-soft">
           <b className="num text-lg text-ink">{room.presence.online}</b> conectados · <b className="num text-lg text-ink">{room.presence.typing}</b> escribiendo ·{" "}
           {room.connection === "open" ? "en vivo" : "reconectando…"}

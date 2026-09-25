@@ -15,7 +15,7 @@ const QUESTIONS = {
     type: "noul",
     instructions: `Is \`message\` a scam, phishing or fraud attempt? ${PERU}`,
     criteria: {
-      true: "It tries to trick the reader into sending money, paying a fee, sharing credentials or personal data, or clicking a suspicious link, or it impersonates a relative, bank, company or authority. Classic red flags: the sender claims a new or changed phone number or a broken or lost phone and asks for money; a relative or friend in trouble asks for an urgent transfer (Yape, Plin, deposit) or for secrecy; an unverifiable sender asks to pay a fee, confirm an account or click a link.",
+      true: "It tries to trick the reader into sending money, paying a fee, sharing credentials or personal data, or clicking a suspicious link, or it impersonates a relative, bank, company or authority. Classic red flags: the sender claims a new or changed phone number or a broken or lost phone and asks for money; a relative or friend in trouble asks for an urgent transfer (Yape, Plin, deposit) or for secrecy; an unverifiable sender asks to pay a fee, confirm an account or click a link; a stranger claims they sent money by mistake and asks for it back; a seller or landlord the reader cannot verify asks for an advance payment to reserve an item or place; a payment is redirected to a new, different or someone else's number or account.",
       false: "An ordinary personal, work or commercial message with no deceptive intent, even if it mentions money, payments or links: splitting a bill with a friend, paying someone back, a genuine verification code that warns not to share it, or an official reminder that does not ask to pay through a link.",
     },
   },
