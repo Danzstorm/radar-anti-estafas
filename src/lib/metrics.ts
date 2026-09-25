@@ -19,7 +19,7 @@ export function forecast(entries: Entry[]): Forecast {
 
   const byType = SCAM_TYPES.map((type) => {
     const of = entries.filter((e) => e.analysis.scamType === type);
-    return { type, count: of.length, avgRisk: of.length ? of.reduce((a, e) => a + e.analysis.risk, 0) / of.length : 0 };
+    return { type, count: of.length, avgRisk: of.length ? of.reduce((a, e) => a + e.analysis.isScam, 0) / of.length : 0 };
   })
     .filter((t) => t.count > 0)
     .sort((a, b) => b.count - a.count);

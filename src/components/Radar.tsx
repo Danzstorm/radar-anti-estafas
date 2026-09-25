@@ -1,11 +1,19 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { SCAM_TYPES, type Entry } from "../../shared/types";
-import { SCAM_LABEL } from "../lib/copy";
+import { SCAM_TYPES, type Entry, type Verdict } from "../../shared/types";
+import { SCAM_LABEL, VERDICT_COLOR, VERDICT_LABEL } from "../lib/copy";
 
-const RAMP = ["var(--color-r0)", "var(--color-r1)", "var(--color-r2)", "var(--color-r3)", "var(--color-r4)"];
 const SECTOR = 360 / SCAM_TYPES.length;
 const FADE_AFTER_MS = 4 * 60_000;
+// Radius maps the scam probability; the zone edges sit exactly on the verdict thresholds.
+const R0 = 12;
+const R1 = 96;
+const rOf = (p: number) => R0 + (R1 - R0) * p;
+const ZONES: { verdict: Verdict; from: number; to: number }[] = [
+  { verdict: "safe", from: 0, to: 0.3 },
+  { verdict: "doubtful", from: 0.3, to: 0.7 },
+  { verdict: "scam", from: 0.7, to: 1 },
+];
 
 /** Stable pseudo-random in [0,1) per message, so an echo never jumps between renders. */
 function hash01(id: string, salt: number) {
@@ -14,32 +22,49 @@ function hash01(id: string, salt: number) {
   return ((h >>> 0) % 10_000) / 10_000;
 }
 
-/** Where a message lands: sector by fraud type, distance from the station by risk. */
+/** Where a message lands: sector by fraud type, distance from the room by scam probability. */
 export function echoPosition(entry: Entry) {
   const sector = SCAM_TYPES.indexOf(entry.analysis.scamType);
-  const angle = (sector + 0.18 + 0.64 * hash01(entry.id, 1)) * SECTOR - 90;
-  const radius = 16 + 74 * entry.analysis.risk + 6 * (hash01(entry.id, 2) - 0.5);
+  const angle = (sector + 0.15 + 0.7 * hash01(entry.id, 1)) * SECTOR - 90;
+  const radius = Math.min(R1 - 4, rOf(entry.analysis.isScam) + 5 * (hash01(entry.id, 2) - 0.5));
   const rad = (angle * Math.PI) / 180;
   return { x: radius * Math.cos(rad), y: radius * Math.sin(rad) };
 }
 
-function Echo({ entry, now }: { entry: Entry; now: number }) {
+function ring(from: number, to: number) {
+  const a = rOf(from);
+  const b = rOf(to);
+  // Annulus as one path: outer circle clockwise, inner counter-clockwise.
+  return `M ${b} 0 A ${b} ${b} 0 1 1 ${-b} 0 A ${b} ${b} 0 1 1 ${b} 0 Z M ${a} 0 A ${a} ${a} 0 1 0 ${-a} 0 A ${a} ${a} 0 1 0 ${a} 0 Z`;
+}
+
+function Echo({ entry, now, latest }: { entry: Entry; now: number; latest: boolean }) {
   const { x, y } = echoPosition(entry);
-  const level = Math.min(4, Math.floor(entry.analysis.risk * 5));
-  const size = 4.2 + entry.analysis.pressure * 1.6;
+  const color = VERDICT_COLOR[entry.analysis.verdict];
+  const size = 3.4 + entry.analysis.pressure * 1.3;
   const age = Math.min(1, (now - entry.at) / FADE_AFTER_MS);
-  // Reflectivity cell: outer bands are weaker returns, the core carries the message's risk color.
   return (
     <motion.g
       initial={{ scale: 0, opacity: 0 }}
-      animate={{ scale: 1, opacity: 1 - age * 0.6 }}
+      animate={{ scale: 1, opacity: 1 - age * 0.3 }}
       exit={{ scale: 0, opacity: 0 }}
       transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
       style={{ transformOrigin: `${x}px ${y}px` }}
     >
-      {RAMP.slice(0, level + 1).map((color, i) => (
-        <circle key={i} cx={x} cy={y} r={size * (1 - i / (level + 1.6))} fill={color} opacity={i === level ? 1 : 0.55} />
-      ))}
+      <circle cx={x} cy={y} r={size * 1.9} fill={color} opacity={0.22} />
+      <circle cx={x} cy={y} r={size} fill={color} stroke="var(--color-sheet)" strokeWidth=".8" />
+      {latest && (
+        <motion.circle
+          cx={x}
+          cy={y}
+          fill="none"
+          stroke="var(--color-ink)"
+          strokeWidth=".9"
+          initial={{ r: size, opacity: 0.9 }}
+          animate={{ r: size * 3.2, opacity: 0 }}
+          transition={{ duration: 1.6, repeat: Infinity, ease: "easeOut" }}
+        />
+      )}
     </motion.g>
   );
 }
@@ -50,74 +75,70 @@ export function Radar({ entries, busy }: { entries: Entry[]; busy: boolean }) {
     const t = setInterval(() => setNow(Date.now()), 5000);
     return () => clearInterval(t);
   }, []);
+  const latestId = entries.at(-1)?.id;
 
   return (
     <svg viewBox="-140 -118 280 236" className="h-full w-full" role="img" aria-label={`Radar con ${entries.length} mensajes analizados`}>
       <defs>
-        <radialGradient id="radar-sheet">
-          <stop offset="0%" stopColor="var(--color-sheet)" />
-          <stop offset="100%" stopColor="var(--color-paper-deep)" />
-        </radialGradient>
         <linearGradient id="sweep-fade" x1="0" y1="0" x2="1" y2="0">
           <stop offset="0%" stopColor="var(--color-ink)" stopOpacity="0" />
-          <stop offset="100%" stopColor="var(--color-ink)" stopOpacity="0.16" />
+          <stop offset="100%" stopColor="var(--color-ink)" stopOpacity="0.14" />
         </linearGradient>
       </defs>
 
-      <circle r="100" fill="url(#radar-sheet)" stroke="var(--color-ink)" strokeOpacity=".5" strokeWidth=".6" />
+      <circle r={R1} fill="var(--color-sheet)" />
+      {ZONES.map((z) => (
+        <path key={z.verdict} d={ring(z.from, z.to)} fillRule="evenodd" fill={VERDICT_COLOR[z.verdict]} opacity={0.12} />
+      ))}
+      {[0.3, 0.7].map((p) => (
+        <circle key={p} r={rOf(p)} fill="none" stroke="var(--color-ink)" strokeOpacity=".35" strokeWidth=".5" strokeDasharray="1.6 1.6" />
+      ))}
+      <circle r={R1} fill="none" stroke="var(--color-ink)" strokeOpacity=".55" strokeWidth=".7" />
 
       {SCAM_TYPES.map((type, i) => {
         const a = ((i * SECTOR - 90) * Math.PI) / 180;
         const mid = (((i + 0.5) * SECTOR - 90) * Math.PI) / 180;
         return (
           <g key={type}>
-            <line x1="0" y1="0" x2={100 * Math.cos(a)} y2={100 * Math.sin(a)} stroke="var(--color-graticule)" strokeWidth=".45" />
-            <text
-              x={109 * Math.cos(mid)}
-              y={109 * Math.sin(mid)}
-              textAnchor="middle"
-              dominantBaseline="middle"
-              className="num"
-              fontSize="6.6"
-              fontWeight="700"
-              fill="var(--color-ink-soft)"
-            >
+            <line x1={R0 * Math.cos(a)} y1={R0 * Math.sin(a)} x2={R1 * Math.cos(a)} y2={R1 * Math.sin(a)} stroke="var(--color-graticule)" strokeWidth=".5" />
+            <text x={113 * Math.cos(mid)} y={112 * Math.sin(mid)} textAnchor="middle" dominantBaseline="middle" className="num" fontSize="6.6" fontWeight="700" fill="var(--color-ink-soft)">
               {SCAM_LABEL[type].toUpperCase()}
             </text>
           </g>
         );
       })}
 
-      {[25, 50, 75].map((r) => (
-        <circle key={r} r={r} fill="none" stroke="var(--color-graticule)" strokeWidth=".45" strokeDasharray={r === 75 ? "0" : "1.4 1.6"} />
-      ))}
-      {[
-        [30, "RIESGO BAJO"],
-        [55, "MEDIO"],
-        [80, "ALTO"],
-      ].map(([r, label]) => (
-        <text key={label} x="1.6" y={-(r as number) + 2.6} fontSize="3.6" className="num" fill="var(--color-ink-faint)" fontWeight="500">
-          {label}
+      {/* Zone names along the vertical spoke, inside each band. */}
+      {ZONES.map((z) => (
+        <text key={z.verdict} x="2" y={-rOf((z.from + z.to) / 2)} dominantBaseline="middle" className="num" fontSize="4.6" fontWeight="700" fill="var(--color-ink)" opacity=".7">
+          {VERDICT_LABEL[z.verdict].toUpperCase()}
         </text>
       ))}
 
-      <motion.g
-        animate={{ rotate: 360 }}
-        transition={{ repeat: Infinity, ease: "linear", duration: busy ? 3.2 : 7 }}
-        style={{ transformOrigin: "0px 0px" }}
-      >
-        <path d="M0 0 L100 0 A100 100 0 0 0 86.6 -50 Z" fill="url(#sweep-fade)" transform="rotate(30)" />
-        <line x1="0" y1="0" x2="100" y2="0" stroke="var(--color-ink)" strokeOpacity=".55" strokeWidth=".7" />
+      <motion.g animate={{ rotate: 360 }} transition={{ repeat: Infinity, ease: "linear", duration: busy ? 3.2 : 7 }} style={{ transformOrigin: "0px 0px" }}>
+        <path d={`M0 0 L${R1} 0 A${R1} ${R1} 0 0 0 ${R1 * Math.cos(Math.PI / 6)} ${-R1 * Math.sin(Math.PI / 6)} Z`} fill="url(#sweep-fade)" transform="rotate(30)" />
+        <line x1="0" y1="0" x2={R1} y2="0" stroke="var(--color-ink)" strokeOpacity=".5" strokeWidth=".7" />
       </motion.g>
 
       <AnimatePresence>
         {entries.map((e) => (
-          <Echo key={e.id} entry={e} now={now} />
+          <Echo key={e.id} entry={e} now={now} latest={e.id === latestId} />
         ))}
       </AnimatePresence>
 
-      <circle r="3.2" fill="var(--color-ink)" />
-      <circle r="6.5" fill="none" stroke="var(--color-ink)" strokeWidth=".6" />
+      <circle r={R0 - 3} fill="var(--color-ink)" />
+      <text textAnchor="middle" dominantBaseline="middle" className="num" fontSize="4" fontWeight="700" fill="var(--color-paper)">
+        SALA
+      </text>
     </svg>
+  );
+}
+
+/** One line under the radar so nobody has to guess what they are looking at. */
+export function RadarLegend() {
+  return (
+    <p className="text-center text-[1.15vw] text-ink-soft">
+      Cada punto es un mensaje · más lejos de la sala = más probable que sea estafa · más grande = más presión
+    </p>
   );
 }

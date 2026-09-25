@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { Eye, EyeOff, Pause, Play as PlayIcon, RotateCcw, Check } from "lucide-react";
-import { ROUNDS, type ControlAction, type Entry, type EntryStatus } from "../../shared/types";
+import { ArrowRight, Eye, EyeOff, Pause, Play as PlayIcon, RotateCcw, Check } from "lucide-react";
+import { ROUNDS, type ControlAction, type Entry, type EntryStatus, type Round } from "../../shared/types";
 import { useRoom } from "../lib/useRoom";
 import { forecast } from "../lib/metrics";
-import { ROUND_LABEL, SCAM_LABEL, VERDICT_LABEL, pct, riskColor, usd } from "../lib/copy";
+import { ROUND_LABEL, ROUND_SCRIPT, SCAM_LABEL, VERDICT_LABEL, pct, riskColor, usd } from "../lib/copy";
 
 const TOKEN_KEY = "radar-control-token";
 const readToken = () => {
@@ -68,8 +68,10 @@ export function Control() {
         </p>
       </header>
 
-      <section className="mt-5">
-        <h2 className="num text-lg font-bold uppercase text-ink-soft">Ronda</h2>
+      <NowPanel round={room.round} busy={busy} onNext={(round) => act({ action: "round", round })} />
+
+      <section className="mt-6">
+        <h2 className="num text-lg font-bold uppercase text-ink-soft">Ir a cualquier ronda</h2>
         <div className="mt-2 grid grid-cols-2 gap-2 sm:grid-cols-5">
           {ROUNDS.map((r) => (
             <button
@@ -121,6 +123,31 @@ export function Control() {
         </ul>
       </section>
     </main>
+  );
+}
+
+/** The current step, what to say, and one big button to move on. */
+function NowPanel({ round, busy, onNext }: { round: Round; busy: boolean; onNext: (r: Round) => void }) {
+  const next = ROUNDS[ROUNDS.indexOf(round) + 1];
+  return (
+    <section className="mt-5 rounded-[14px] bg-sheet p-4 shadow-[0_8px_24px_rgb(29_43_54/.08)]">
+      <p className="text-sm text-ink-soft">Ahora</p>
+      <h2 className="num text-2xl font-bold uppercase">{ROUND_LABEL[round]}</h2>
+      <ul className="mt-2 flex list-disc flex-col gap-1.5 pl-5 text-[15px] leading-snug">
+        {ROUND_SCRIPT[round].map((line) => (
+          <li key={line}>{line}</li>
+        ))}
+      </ul>
+      {next && (
+        <button
+          disabled={busy}
+          onClick={() => onNext(next)}
+          className="mt-4 flex w-full items-center justify-center gap-2 rounded-[12px] bg-ink px-4 py-4 text-lg font-semibold text-paper disabled:opacity-50"
+        >
+          Siguiente: {ROUND_LABEL[next]} <ArrowRight className="size-5" aria-hidden />
+        </button>
+      )}
+    </section>
   );
 }
 

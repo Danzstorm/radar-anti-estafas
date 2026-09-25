@@ -3,7 +3,7 @@ import { AnimatePresence, motion } from "motion/react";
 import { Dices, Loader2, Monitor, Send, ShieldAlert, ShieldCheck, ShieldQuestion, EyeOff, Clock3 } from "lucide-react";
 import { REACTIONS, type Entry, type Guess, type Reaction } from "../../shared/types";
 import { useRoom } from "../lib/useRoom";
-import { MISSIONS, PRESSURE_LEVELS, SCAM_LABEL, VERDICT_LABEL, pct, riskColor } from "../lib/copy";
+import { MISSIONS, PRESSURE_LEVELS, SCAM_LABEL, VERDICT_COLOR, VERDICT_LABEL, ZONE_NAME, pct, riskColor } from "../lib/copy";
 
 const MAX = 400;
 const REACTION_LABEL: Record<Reaction, string> = { "😱": "Qué miedo", "😂": "Qué risa", "🤔": "Qué raro", "🚩": "Bandera roja", "👏": "Aplausos" };
@@ -97,7 +97,7 @@ export function Play() {
               value={text}
               onChange={(e) => onType(e.target.value)}
               rows={6}
-              placeholder={mission.examples[0]}
+              placeholder="Pega o escribe aquí el mensaje…"
               className="mt-5 w-full resize-none rounded-[14px] border border-graticule bg-sheet p-4 text-[16px] leading-relaxed text-ink placeholder:text-ink-faint focus:border-ink focus:outline-none"
             />
             <div className="mt-1.5 flex items-center justify-between text-xs text-ink-faint">
@@ -187,12 +187,12 @@ function Waiting({ results }: { results: boolean }) {
 
 function Result({ entry, onAgain }: { entry: Entry; onAgain: () => void }) {
   const a = entry.analysis;
-  const color = riskColor(a.risk);
+  const color = VERDICT_COLOR[a.verdict];
   const Icon = a.verdict === "scam" ? ShieldAlert : a.verdict === "safe" ? ShieldCheck : ShieldQuestion;
   const matched = entry.guess !== "unsure" && a.verdict !== "doubtful" ? (entry.guess === "scam") === (a.verdict === "scam") : null;
   const screen =
     entry.status === "visible"
-      ? { Icon: Monitor, text: "Tu mensaje ya está en la pantalla. ¡Búscalo en el radar!" }
+      ? { Icon: Monitor, text: `¡Ya está en la pantalla! Búscalo en la zona ${ZONE_NAME[a.verdict]} del radar, sector «${SCAM_LABEL[a.scamType]}». Es el punto que late.` }
       : entry.status === "pending"
         ? { Icon: Clock3, text: "El presentador lo revisará antes de mostrarlo." }
         : { Icon: EyeOff, text: "Este mensaje no se mostrará en pantalla." };

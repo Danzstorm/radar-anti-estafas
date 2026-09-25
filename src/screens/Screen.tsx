@@ -4,8 +4,8 @@ import { PenLine, Pause, Smartphone, Zap } from "lucide-react";
 import type { Entry, Reaction } from "../../shared/types";
 import { useRoom } from "../lib/useRoom";
 import { forecast } from "../lib/metrics";
-import { PRESSURE_LEVELS, ROUND_LABEL, SCAM_LABEL, VERDICT_LABEL, pct, riskColor, usd } from "../lib/copy";
-import { Radar, echoPosition } from "../components/Radar";
+import { MISSIONS, PRESSURE_LEVELS, ROUND_LABEL, SCAM_LABEL, VERDICT_COLOR, VERDICT_LABEL, pct, riskColor, usd } from "../lib/copy";
+import { Radar, RadarLegend, echoPosition } from "../components/Radar";
 import { QR } from "../components/QR";
 import { FloatingReactions, type Floating } from "../components/FloatingReactions";
 
@@ -30,7 +30,8 @@ export function Screen() {
     [room.entries, frozenAt],
   );
 
-  const called = useCalledEntry(entries);
+  const called = useCalledEntry(entries, room.synced);
+  const mission = MISSIONS[room.round];
   const stats = forecast(entries);
   const lobby = room.round === "lobby";
 
@@ -45,10 +46,18 @@ export function Screen() {
         {lobby ? (
           <Lobby online={room.presence.online} />
         ) : (
-          <div className="relative mx-auto mt-[1vw] aspect-[280/236] max-w-full min-h-0 flex-1">
-            <Radar entries={entries} busy={room.presence.typing > 2 || entries.length > 20} />
-            <AnimatePresence>{called && <CalledCard key={called.id} entry={called} />}</AnimatePresence>
-          </div>
+          <>
+            {mission && (
+              <p className="mt-[0.8vw] text-[1.6vw] leading-tight">
+                <b className="num uppercase">Misión:</b> {mission.title}
+              </p>
+            )}
+            <div className="relative mx-auto mt-[0.6vw] aspect-[280/236] max-w-full min-h-0 flex-1">
+              <Radar entries={entries} busy={room.presence.typing > 2 || entries.length > 20} />
+              <AnimatePresence>{called && room.round !== "results" && <CalledCard key={called.id} entry={called} />}</AnimatePresence>
+            </div>
+            <RadarLegend />
+          </>
         )}
       </section>
 
@@ -87,10 +96,11 @@ export function Screen() {
 }
 
 /** The newest message is "called" for the whole room before it settles onto the radar. */
-function useCalledEntry(entries: Entry[]) {
+function useCalledEntry(entries: Entry[], synced: boolean) {
   const seen = useRef<Set<string> | null>(null);
   const [called, setCalled] = useState<Entry | null>(null);
   useEffect(() => {
+    if (!synced) return;
     if (seen.current === null) {
       seen.current = new Set(entries.map((e) => e.id));
       return;
@@ -98,7 +108,7 @@ function useCalledEntry(entries: Entry[]) {
     const fresh = entries.filter((e) => !seen.current!.has(e.id));
     fresh.forEach((e) => seen.current!.add(e.id));
     if (fresh.length) setCalled(fresh[fresh.length - 1]);
-  }, [entries]);
+  }, [entries, synced]);
   useEffect(() => {
     if (!called) return;
     const t = setTimeout(() => setCalled(null), CALL_MS);
@@ -110,7 +120,7 @@ function useCalledEntry(entries: Entry[]) {
 function CalledCard({ entry }: { entry: Entry }) {
   const a = entry.analysis;
   const { x, y } = echoPosition(entry);
-  const color = riskColor(a.risk);
+  const color = VERDICT_COLOR[a.verdict];
   return (
     <motion.article
       className="absolute w-[82%] -translate-x-1/2 -translate-y-1/2 rounded-[14px] bg-sheet p-[1.6vw] shadow-[0_18px_50px_rgb(29_43_54/.28)]"

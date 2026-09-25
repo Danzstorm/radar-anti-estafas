@@ -16,6 +16,19 @@ export const VERDICT_LABEL: Record<Verdict, string> = {
   safe: "Normal",
 };
 
+/** Zone colors on the radar and verdict colors everywhere else: one meaning per color. */
+export const VERDICT_COLOR: Record<Verdict, string> = {
+  scam: "var(--color-r3)",
+  doubtful: "var(--color-r1)",
+  safe: "var(--color-r0)",
+};
+
+export const ZONE_NAME: Record<Verdict, string> = {
+  scam: "roja",
+  doubtful: "amarilla",
+  safe: "verde",
+};
+
 export const PRESSURE_LEVELS = ["Sin presión", "Presión leve", "Presión fuerte", "Presión extrema"];
 
 export interface Mission {
@@ -71,14 +84,40 @@ export const ROUND_LABEL: Record<Round, string> = {
   results: "Resultados",
 };
 
-export const pct = (x: number) => `${Math.round(x * 100)}%`;
+/** What the presenter says and looks for in each round, shown only on /control. */
+export const ROUND_SCRIPT: Record<Round, string[]> = {
+  lobby: [
+    "Proyecta /pantalla y pide a todos que escaneen el QR.",
+    "Pueden ir reaccionando con los emojis mientras esperan.",
+    "Cuando la mayoría esté conectada, pasa a la Ronda 1.",
+  ],
+  real: [
+    "«Peguen un mensaje sospechoso que les haya llegado de verdad».",
+    "Cada mensaje sale en grande y cae al radar: lejos del centro = más probable que sea estafa.",
+    "Comenta los que caen en la zona roja: ¿a quién le llegó uno así?",
+  ],
+  fool: [
+    "Reto: «escriban la estafa más creíble, sin prisas ni links raros».",
+    "Busca ecos en la zona amarilla: ahí la IA duda. Muestra su probabilidad y su seguridad.",
+    "Mensaje clave: la IA no escribe, decide, y te dice qué tan segura está.",
+  ],
+  falsePositive: [
+    "Reto: «escriban un mensaje normal que parezca estafa».",
+    "Si alguno cae en la zona roja es un falso positivo: la IA también se equivoca.",
+    "Por eso el código decide los umbrales y un humano revisa lo dudoso.",
+  ],
+  results: [
+    "Lee el parte final: % de estafas, tipo más común y si la sala acertó.",
+    "Remata con el costo: toda la sala cuesta una fracción de centavo y cada respuesta tarda milisegundos.",
+  ],
+};
+
+export const pct =(x: number) => `${Math.round(x * 100)}%`;
 export const usd = (x: number) => `US$ ${x < 0.01 ? x.toFixed(5) : x.toFixed(2)}`;
 
-/** Reflectivity ramp: the same five colors mean the same risk on every screen. */
-export function riskColor(risk: number): string {
-  if (risk >= 0.85) return "var(--color-r4)";
-  if (risk >= 0.65) return "var(--color-r3)";
-  if (risk >= 0.45) return "var(--color-r2)";
-  if (risk >= 0.25) return "var(--color-r1)";
+/** Same three zones as the radar and the verdicts: green normal, yellow doubtful, red scam. */
+export function riskColor(p: number): string {
+  if (p >= 0.7) return "var(--color-r3)";
+  if (p >= 0.3) return "var(--color-r1)";
   return "var(--color-r0)";
 }

@@ -5,18 +5,20 @@ export type Role = "play" | "screen" | "control";
 export type Connection = "connecting" | "open" | "closed" | "unauthorized";
 
 export interface RoomState {
+  /** False until the first snapshot arrives, so late joiners don't treat history as news. */
+  synced: boolean;
   round: Round;
   frozen: boolean;
   entries: Entry[];
   presence: Presence;
 }
 
-const initial: RoomState = { round: "lobby", frozen: false, entries: [], presence: { online: 0, typing: 0 } };
+const initial: RoomState = { synced: false, round: "lobby", frozen: false, entries: [], presence: { online: 0, typing: 0 } };
 
 function reduce(state: RoomState, event: ServerEvent): RoomState {
   switch (event.type) {
     case "snapshot":
-      return { round: event.round, frozen: event.frozen, entries: event.entries, presence: event.presence };
+      return { synced: true, round: event.round, frozen: event.frozen, entries: event.entries, presence: event.presence };
     case "entry":
       return state.entries.some((e) => e.id === event.entry.id)
         ? { ...state, entries: state.entries.map((e) => (e.id === event.entry.id ? event.entry : e)) }
@@ -30,7 +32,7 @@ function reduce(state: RoomState, event: ServerEvent): RoomState {
     case "presence":
       return { ...state, presence: event.presence };
     case "reset":
-      return { ...initial, presence: state.presence };
+      return { ...initial, synced: true, presence: state.presence };
     default:
       return state;
   }
