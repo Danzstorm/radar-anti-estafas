@@ -1,0 +1,70 @@
+@import "tailwindcss";
+@import "@fontsource/barlow-condensed/500.css";
+@import "@fontsource/barlow-condensed/700.css";
+@import "@fontsource-variable/figtree";
+
+/* One world for every screen: a light weather-radar chart. The reflectivity ramp is the only
+   saturated color and it always means risk. */
+@theme {
+  --font-sans: "Figtree Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Barlow Condensed", "Figtree Variable", sans-serif;
+
+  --color-paper: #eef1ea;
+  --color-paper-deep: #e2e8de;
+  --color-sheet: #f8faf5;
+  --color-graticule: #c3cdc1;
+  --color-ink: #1d2b36;
+  --color-ink-soft: #47586a;
+  --color-ink-faint: #6b7a86;
+
+  --color-r0: #2fa84f;
+  --color-r1: #f2c230;
+  --color-r2: #e8702a;
+  --color-r3: #d7263d;
+  --color-r4: #b0249a;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@layer base {
+  html {
+    background: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -webkit-tap-highlight-color: transparent;
+  }
+  body {
+    min-height: 100dvh;
+  }
+  ::selection {
+    background: var(--color-r1);
+    color: var(--color-ink);
+  }
+  :focus-visible {
+    outline: 3px solid var(--color-ink);
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+  textarea {
+    caret-color: var(--color-r3);
+  }
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-graticule) transparent;
+  }
+  .num {
+    font-family: var(--font-display);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.01em;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

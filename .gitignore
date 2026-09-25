@@ -1,0 +1,10 @@
+node_modules/
+dist/
+.wrangler/
+.env
+.dev.vars
+*.local
+.atl/
+.claude/skills/
+contact-cleaner.html
+.impeccable/questions/
